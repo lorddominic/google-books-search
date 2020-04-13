@@ -1,9 +1,10 @@
 import React from "react"
 import API from "../utils/API";
+import BookDetails from "./BookDetails";
 
 class GetBook extends React.Component {
     state = {
-        googleSearch: ""
+        googleSearch: [] 
     }
     handleInput = (event) => {
         const { name, value } = event.target;
@@ -14,18 +15,27 @@ class GetBook extends React.Component {
     }
     search = () => {
         API.google(this.state.userinput).then(x=>{
+            console.log(x);
         this.setState({
             googleSearch: x.data
         })
      })
     }
     render() {
+        var bookslist = this.state.googleSearch
         return (
             <div>
                 <input name="userinput" onChange={this.handleInput} />
                 <button name="googleSearch" onClick={this.search}>Search google books</button>
-                {this.state.googleSearch && this.state.googleSearch.map(book=>(
-                        <h1>{book.volumeInfo.title}</h1>
+                {bookslist.map((book,key)=>(
+                        <BookDetails 
+                            title = {book.volumeInfo.title}
+                            subtitle = {book.volumeInfo.subtitle}
+                            authors= {book.volumeInfo.authors.join(",")}
+                            synopsis={book.volumeInfo.description}
+                            image={book.volumeInfo.imageLinks.thumbnail}
+                            
+                           key = {book.id} />
                 ))}
             </div>
         )

@@ -9,7 +9,7 @@ router.get("/google/:query", (req, res) => {
   var query = req.params.query
   console.log(query)
   axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}`).then(x=>{
-    console.log(x.data.items)
+    // console.log(x.data.items)
     res.json(x.data.items)
   })
 })
