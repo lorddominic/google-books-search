@@ -1,33 +1,36 @@
 import React from "react";
 import API from "../utils/API"
 class BookDetails extends React.Component {
-    // state = {
-    //     id: this.props.id,
-    //     title: this.props.volumeInfo.title,
-    //     authors: this.props.volumeInfo.authors[0],
-    //     synopsis: this.props.volumeInfo.discription
-    // }
+    state = {
+        saved: this.props.saved
+    }
     saveBook = () => {
         var records = {
-            id: this.props.booksinfo.id,
-            title: this.props.booksinfo.volumeInfo.title,
-            author: this.props.booksinfo.volumeInfo.authors[0],
-            synopsis: this.props.booksinfo.volumeInfo.description,
-            imageURL: this.props.booksinfo.volumeInfo.imageLinks.smallThumbnail    
+            id: this.props.id,
+            title: this.props.title,
+            author: this.props.authors,
+            synopsis: this.props.synopsis,
+            // imageURL: this.props.image    
         }
         API.saveBook(records).then((response) => {
             console.log(response)
-        });
+            this.setState({ saved: true })
+        }).catch((error) => {
+           console.log("Error",error);
+           this.setState({
+               saved: true
+           })
+        })
     }
     render() {
-        console.log(this.props)
+        // console.log(this.props.rec.volumeInfo.imageLinks.thumbnail)
         return (<div className="cards">
-            <h1>Title: {this.props.title}</h1>
-            <h1>Authors: {this.props.authors}</h1>
-            <h1>Synopsis: {this.props.synopsis}</h1>
-           
+            <h3>Title: {this.props.title}</h3>
+            <h6>Authors: {this.props.authors}</h6>
+            <p>Synopsis: {this.props.synopsis}</p>
+
             {/* <img src={this.props.image} /> */}
-            <button onClick={this.saveBook}>Save Book</button>
+            {this.state.saved ? <h5>Book already Saved</h5> : <button onClick={this.saveBook}>Save Book</button>}
         </div>)
     }
 }
